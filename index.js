@@ -13,28 +13,21 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.post('/payment-sheet', async (req, res) => {
+    console.log(req.body); // Debug request body
     try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: req.body.amount,
-            currency: 'lkr',
-            automatic_payment_methods: {
-                enabled: true
-            }
-        })
-        res.json({paymentIntent: paymentIntent.client_secret});
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: req.body.amount,
+        currency: 'lkr',
+        automatic_payment_methods: {
+          enabled: true
+        }
+      });
+      res.json({ paymentIntent: paymentIntent.client_secret });
     } catch (error) {
-        res.status(400).json({
-            error: error.message,
-        });
-        console.log(error)
+      res.status(400).json({ error: error.message });
+      console.log(error);
     }
-});
-
-app.get('/test', (req, res) => {
-    res.send('Server is reachable');
-});
-
-
+  });
 
 app.listen(PORT, () => {
     console.log("Server is Running at " + PORT);
